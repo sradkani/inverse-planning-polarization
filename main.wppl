@@ -1,0 +1,30 @@
+/***************
+The decision distribution of the punisher model
+Requirements:
+  - 
+Inputs:
+  - 
+****************/
+
+// Set the prior over content and moderator's motives (i.e., alphas)
+var content_prior = Beta({a:argv.beta_a_content, b:argv.beta_b_content})
+
+var alphas_function = function(){
+  var alpha_accuracy_prior = Beta({a:argv.beta_a_alpha_accuracy, b:argv.beta_b_alpha_accuracy})
+  var alpha_target_prior = Beta({a:argv.beta_a_alpha_target, b:argv.beta_b_alpha_target})
+  
+  // alpha priors determined by continuous concept of legitimacy
+  var alphas = {
+    alpha_accuracy: sample(alpha_accuracy_prior),
+    alpha_target: sample(alpha_target_prior) - 0.5  // independent alpha_target
+  }
+  return alphas
+}
+
+priorDists(content_prior, alphas_function)
+
+if(argv.moderator=='Uaccuracy-Utarget'){
+  moderatorDecisionDist(moderator, content_prior, alphas_function)
+  var actions = [argv.action]
+  map(function(target_action){posteriorDists(makeObserver, moderator, content_prior, alphas_function, target_action)}, actions)
+}

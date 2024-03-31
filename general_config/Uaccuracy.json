@@ -1,0 +1,8 @@
+[
+  {
+    "X": 1,
+    "training_set": "All",
+    "U_content_coef": 1,
+    "U_target_coef": -1
+  }
+]

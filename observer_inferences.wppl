@@ -1,0 +1,77 @@
+
+
+var moderatorDecisionDist = function(moderator, content_prior, alphas_function){
+  var moderator_dist = Infer({method: 'MCMC', samples: 100000, kernel: 'MH',
+                             model: function(){
+                               var content_truth = sample(content_prior)
+                               var alphas = alphas_function()
+                               var policy = Infer({model: function(){
+                                return moderator('InitialState', content_truth, alphas)}})
+                               return sample(policy)
+                             }})
+
+  json.write(argv.dir+'/moderator/moderator_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', moderator_dist);
+}
+
+var priorDists = function(content_prior, alphas_function){
+  // The priors over content, and alphas
+  var content_dist = Infer({method: 'MCMC', samples: 400000,
+                            model: function(){return sample(content_prior)}})
+  //json.write(argv.dir+'/priors/content_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', content_dist);
+  json.write(argv.dir+'/priors/expected_content_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', expectation(content_dist));
+
+  var alphas_dist = Infer({method: 'MCMC', samples: 400000,
+                            model: function(){
+                              var alphas = alphas_function()
+                              return alphas
+                            }})
+
+  var alpha_accuracy_dist = marginalize(alphas_dist, function(x){return x.alpha_accuracy})
+  //json.write(argv.dir+'/priors/alpha_accuracy_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', alpha_accuracy_dist);
+  json.write(argv.dir+'/priors/expected_alpha_accuracy_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', expectation(alpha_accuracy_dist));
+
+  var alpha_target_dist = marginalize(alphas_dist, function(x){return x.alpha_target})
+  //json.write(argv.dir+'/priors/alpha_target_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', alpha_target_dist);
+  json.write(argv.dir+'/priors/expected_alpha_target_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', expectation(alpha_target_dist));
+}
+
+
+var makeObserver = function(f, moderator, content_prior, alphas_function){return function(){
+  // set the prior over content and moderator's motives (i.e., alphas)
+  var content_truth = sample(content_prior)
+  var alphas = alphas_function()
+
+  // given observation of the moderator's action, infer content truthfulness and moderator's alphas
+  f(content_truth, alphas)
+}}
+
+
+var posteriorDists = function(makeObserver, moderator, content_prior, alphas_function, target_action){
+
+  var posterior_dists = Infer({method: 'MCMC', samples: 400000, kernel: 'MH'},
+                          makeObserver(function(content_truth, alphas){
+      observe(Infer({model: function(){
+                               return moderator('InitialState', content_truth, alphas)
+                    }}), target_action)
+      return {content_truth: content_truth,
+              alpha_accuracy: alphas.alpha_accuracy,
+              alpha_target: alphas.alpha_target
+      }
+  }, moderator, content_prior, alphas_function))
+
+  // Infer content truthfulness
+  var content_dist = marginalize(posterior_dists, function(x){return x.content_truth})
+  json.write(argv.dir+'/posteriors/'+target_action+'/content_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', content_dist);
+  json.write(argv.dir+'/posteriors/'+target_action+'/expected_content_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', expectation(content_dist));
+
+  // Infer alpha_accuracy
+  var alpha_accuracy_dist = marginalize(posterior_dists, function(x){return x.alpha_accuracy})
+  json.write(argv.dir+'/posteriors/'+target_action+'/alpha_accuracy_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', alpha_accuracy_dist);
+  json.write(argv.dir+'/posteriors/'+target_action+'/expected_alpha_accuracy_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', expectation(alpha_accuracy_dist));
+
+  // Infer alpha_target
+  var alpha_target_dist = marginalize(posterior_dists, function(x){return x.alpha_target})
+  json.write(argv.dir+'/posteriors/'+target_action+'/alpha_target_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', alpha_target_dist);
+  json.write(argv.dir+'/posteriors/'+target_action+'/expected_alpha_target_'+argv.alpha_0+'_'+argv.beta+'_'+argv.gamma+'.json', expectation(alpha_target_dist));
+
+}

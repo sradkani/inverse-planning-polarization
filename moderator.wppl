@@ -1,0 +1,59 @@
+/***************
+The mental model of a fact-checker/politician/etc. who is motivated by correcting misinformation and cares about the consequences for the target to different degrees 
+when deciding whether and how to respond to a content
+****************/
+
+// The possible responses
+var available_actions = ['None', 'Debunk'];
+
+// State transition probabilities as a result of choosing each action
+var transition = function(state, action) {
+  return 'ignore'     // we ignore the state transition for now for simplicity, because we are not considering effect of action on changing others' beliefs
+};
+
+// The function to calculate different utilities
+var get_utilities = function(content_truth, action, next_state){
+  // The utilities associated with the content
+  var U_content_accuracy = content_truth - 1 // the utility associated with accuracy of content
+
+  // The utilities associated with the action of potential punisher and the resulting state changes
+  var U_target_action = {
+    None: argv.U_target_none,   // set to 0
+    Debunk: argv.U_target_debunk  // set to -1
+  }
+
+  // u-shaped U_retribution
+  var harshness = argv.U_content_coef * U_content_accuracy + argv.U_target_coef * U_target_action[action]
+  var U_accuracy = (harshness>0) ? -1 * argv.gamma * harshness : harshness
+
+  var utilities = {
+    U_accuracy: U_accuracy,
+    U_target: U_target_action[action]
+  }
+
+  return utilities
+}
+
+var moderator = function(curr_state, content_truth, alphas){
+  // set the rationality parameter -- TODO: set this outside the punisher function so that you can vary it in a settings file
+  var beta = argv.beta
+
+  // sample an action
+  var action = uniformDraw(available_actions)
+
+  // determine the utilities of the action, as a function of the context, and wrongness
+  var utilities_dist = Infer({model: function() {
+    var next_state = transition(curr_state, action)
+    var utilities = get_utilities(content_truth, action, next_state)
+    return utilities
+  }})
+  var U_accuracy = expectation(marginalize(utilities_dist, function(x){return x.U_accuracy}))
+  var U_target = expectation(marginalize(utilities_dist, function(x){return x.U_target}))
+
+  // determine the total utility
+  var U_total = argv.alpha_0 * alphas['alpha_accuracy'] * U_accuracy + alphas['alpha_target'] * U_target
+
+  factor(beta * U_total)
+
+  return action
+}

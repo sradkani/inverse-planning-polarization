@@ -1,0 +1,27 @@
+[
+  {
+    "X": 1,
+    "epoch": "1",
+    "action": "Debunk"
+  }, 
+  {
+    "X": 2,
+    "epoch": "2",
+    "action": "Debunk"
+  },
+  {
+    "X": 1,
+    "epoch": "3",
+    "action": "Debunk"
+  }, 
+  {
+    "X": 2,
+    "epoch": "4",
+    "action": "Debunk"
+  },
+  {
+    "X": 1,
+    "epoch": "5",
+    "action": "Debunk"
+  }
+]

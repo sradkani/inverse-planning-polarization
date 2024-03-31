@@ -1,0 +1,8 @@
+{
+  "name": "content-moderation-model",
+  "version": "0.0.1",
+  "description": "Functions used in the observer inferences",
+  "webppl": {
+    "wppl": ["moderator.wppl", "observer_inferences.wppl"]
+  }
+}
