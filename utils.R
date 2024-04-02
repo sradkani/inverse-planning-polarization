@@ -145,6 +145,7 @@ plot_belief_polarization_relationship <- function(data, x_var, y_var, fill_var, 
   
   # making scatter plot of x_var vs y_var polarization
   sub_fig <- ggplot(data, aes(x = !!x_sym, y = !!y_sym, color = !!fill_sym)) +
+    geom_vline(xintercept=0.6, color="grey10", linetype="dashed") + 
     geom_point(size=3) + 
     scale_color_gradient(low = "grey90", high = fill_color,
                          limits = c(0, max(data[[fill_var]], na.rm = TRUE)),
@@ -161,7 +162,7 @@ plot_belief_polarization_relationship <- function(data, x_var, y_var, fill_var, 
 }
 
 
-plot_generalization_polarization <- function(data, x_var, y_var, fill_var, fill_color, xlabel, ylabel, legend){
+ plot_generalization_polarization <- function(data, x_var, y_var, fill_var, fill_color, xlabel, ylabel, legend){
   # Prepare symbols for the variable names
   x_sym <- sym(x_var)
   y_sym <- sym(y_var)

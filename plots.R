@@ -169,10 +169,19 @@ generalization_polarization_data_wide <- merge(generalization_polarization_data_
                                                   "content_polarization")),
                                 by=c("content_variance", "ID.y",
                                      "alpha_accuracy_mean", "alpha_accuracy_variance", 
-                                     "alpha_target_mean", "alpha_target_variance"))
+                                     "alpha_target_mean", "alpha_target_variance")) %>%
+  dplyr::rename("initial_alpha_target_polarization" = "alpha_target_polarization",
+                "initial_alpha_accuracy_polarization" = "alpha_accuracy_polarization")
+
+
+## The statistics on polarization of content beliefs
+final_content_polarization <- generalization_polarization_model_data %>% 
+  filter(epoch==5, variable=="Content truth") %>%
+  dplyr::select(c("absolute_belief_polarization"))
+summary(final_content_polarization)
 
 ## Relationship between polarization of beliefs about authority and new content polarization
-fig5 <- plot_generalization_polarization(generalization_polarization_data_wide, "alpha_accuracy_polarization", "alpha_target_polarization", "content_polarization", 
+fig5 <- plot_generalization_polarization(generalization_polarization_data_wide, "initial_alpha_accuracy_polarization", "initial_alpha_target_polarization", "content_polarization", 
                      "brown", "Initial \nAccuracy polarization", "Initial \nBias polarization", "Content \npolarization")                                              
                      
 ggsave(paste("plots/generalization/belief_polarization_relationships", ".jpg", sep=""), fig5, width=6, height=5)
@@ -208,6 +217,8 @@ data <- generalization_model_data_long %>%
   filter(ID==159 | ID==159+243)
 fig_ID159 <- plot_belief_evolution(data, "ID = 159")
 ggsave(paste("plots/generalization/ID-159", ".jpg", sep=""), fig_ID159, width=4, height=8)
+
+
 
 ######################################################################################################
 ##################################### Supplementary figures ##########################################
