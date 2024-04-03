@@ -3,16 +3,17 @@ library(gridExtra)
 library(tidyverse)
 library(ggplot2)
 library(ggpubr)
-library(hrbrthemes)
+# library(hrbrthemes)
 
-####################
+
 ## Load the functions
-####################
 source("utils.R")
 
-###############################
+###########################
+## Within-Topic simulations
+###########################
+
 ## Load the data and preprocess
-###############################
 model_data0 <- read.csv("results_Uaccuracy_Utarget/training_All/simulated_results_format0.csv", header = TRUE)
 model_data_long <- prepare_model_data(model_data0)
 
@@ -38,7 +39,6 @@ polarization_data_wide <- polarization_model_data %>%
 #################################################################
 # Plot the relationship between polarization of different beliefs
 #################################################################
-
 
 fig2 <- plot_belief_polarization_relationship(polarization_data_wide, 
                                                 "content_polarization", "alpha_accuracy_polarization", "alpha_target_polarization", 
@@ -128,9 +128,10 @@ fig4 <- ggarrange(fig4.1, fig4.2, fig4.3, fig4.4, ncol=4, heights = c(5, 5, 5, 5
 ggsave(paste("plots/bias_content_interaction", ".jpg", sep=""), fig4, width=15, height=8)
 
 ##############################
-## Cross-domain generalization
+## Cross-Topic generalization
 ##############################
 
+## Load the data and preprocess
 generalization_model_data0 <- read.csv("results_Uaccuracy_Utarget/training_All/simulated_results_generalization_format0.csv", header = TRUE)
 generalization_model_data_long <- prepare_model_data(generalization_model_data0)
 
@@ -174,20 +175,29 @@ generalization_polarization_data_wide <- merge(generalization_polarization_data_
                 "initial_alpha_accuracy_polarization" = "alpha_accuracy_polarization")
 
 
+####################################################
 ## The statistics on polarization of content beliefs
+####################################################
+
 final_content_polarization <- generalization_polarization_model_data %>% 
   filter(epoch==5, variable=="Content truth") %>%
   dplyr::select(c("absolute_belief_polarization"))
 summary(final_content_polarization)
 
+############################################################################################
 ## Relationship between polarization of beliefs about authority and new content polarization
+############################################################################################
+
 fig5 <- plot_generalization_polarization(generalization_polarization_data_wide, "initial_alpha_accuracy_polarization", "initial_alpha_target_polarization", "content_polarization", 
                      "brown", "Initial \nAccuracy polarization", "Initial \nBias polarization", "Content \npolarization")                                              
                      
 ggsave(paste("plots/generalization/belief_polarization_relationships", ".jpg", sep=""), fig5, width=6, height=5)
 
+########################################
+## Examples chosen from the scatter plot
+########################################
 
-### Examples chosen from the scatter plot
+## Old ones
 # ID = 62
 data <- generalization_model_data_long %>%
   filter(ID==62 | ID==62+243)
@@ -218,7 +228,18 @@ data <- generalization_model_data_long %>%
 fig_ID159 <- plot_belief_evolution(data, "ID = 159")
 ggsave(paste("plots/generalization/ID-159", ".jpg", sep=""), fig_ID159, width=4, height=8)
 
+## New ones
+# ID = 81
+data <- generalization_model_data_long %>%
+  filter(ID==81 | ID==81+243)
+fig_ID81 <- plot_belief_evolution(data, "ID = 81")
+ggsave(paste("plots/generalization/ID-81", ".jpg", sep=""), fig_ID81, width=4, height=8)
 
+# ID = 178
+data <- generalization_model_data_long %>%
+  filter(ID==178 | ID==178+243)
+fig_ID178 <- plot_belief_evolution(data, "ID = 178")
+ggsave(paste("plots/generalization/ID-178", ".jpg", sep=""), fig_ID178, width=4, height=8)
 
 ######################################################################################################
 ##################################### Supplementary figures ##########################################
