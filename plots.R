@@ -29,7 +29,7 @@ polarization_data_wide <- polarization_model_data %>%
                   "alpha_target_mean", "alpha_target_variance", 
                   "variable", "absolute_belief_polarization")) %>%
   mutate(variable = case_when(
-    variable == "Content truth" ~ "content",
+    variable == "Perspective truth" ~ "content",
     variable == "Accuracy" ~ "alpha_accuracy",
     variable == "Bias" ~ "alpha_target",
     TRUE ~ variable
@@ -42,7 +42,7 @@ polarization_data_wide <- polarization_model_data %>%
 
 fig2 <- plot_belief_polarization_relationship(polarization_data_wide, 
                                                 "content_polarization", "alpha_accuracy_polarization", "alpha_target_polarization", 
-                                                "grey10", "Content polarization", "Accuracy polarization", "Bias \npolarization")
+                                                "grey10", "Perspective polarization", "Accuracy polarization", "Bias \npolarization")
 
 ggsave(paste("plots/belief_polarization_relationships", ".jpg", sep=""), fig2, width=6, height=5)
                                                 
@@ -73,29 +73,29 @@ data <- model_data_long %>%
   filter(alpha_target_mean == 0, alpha_target_variance == 0.0225, 
          alpha_accuracy_mean == 0.8, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0025)
-fig3.1 <- plot_belief_evolution(data, "High accuracy, certain content")
+fig3.1 <- plot_belief_evolution(data, "High accuracy, certain perspective")
 
 data <- model_data_long %>%
   filter(alpha_target_mean == 0, alpha_target_variance == 0.0225, 
          alpha_accuracy_mean == 0.8, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0225)
-fig3.2 <- plot_belief_evolution(data, "High accuracy, uncertain content")
+fig3.2 <- plot_belief_evolution(data, "High accuracy, uncertain perspective")
 
 data <- model_data_long %>%
   filter(alpha_target_mean == 0, alpha_target_variance == 0.0225, 
          alpha_accuracy_mean == 0.2, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0025)
-fig3.3 <- plot_belief_evolution(data, "Low accuracy, certain content")
+fig3.3 <- plot_belief_evolution(data, "Low accuracy, certain perspective")
 
 data <- model_data_long %>%
   filter(alpha_target_mean == 0, alpha_target_variance == 0.0225, 
          alpha_accuracy_mean == 0.2, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0225)
-fig3.4 <- plot_belief_evolution(data, "Low accuracy, uncertain content")
+fig3.4 <- plot_belief_evolution(data, "Low accuracy, uncertain perspective")
 
 fig3 <- ggarrange(fig3.1, fig3.2, fig3.3, fig3.4, ncol=4, heights = c(5, 5, 5, 5), widths=c(5, 5, 5, 5))
 
-ggsave(paste("plots/accuracy_content_interaction", ".jpg", sep=""), fig3, width=15, height=8)
+ggsave(paste("plots/accuracy_content_interaction", ".jpg", sep=""), fig3, width=17, height=8)
 
 ## Interaction between bias uncertainty and content uncertainty
 # Accuracy constant and uncertain, bias in favor, high and low bias uncertainty, high and low content uncertainty
@@ -103,29 +103,29 @@ data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, 0.3) , alpha_target_variance == 0.0025, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0025)
-fig4.1 <- plot_belief_evolution(data, "Certain bias, certain content")
+fig4.1 <- plot_belief_evolution(data, "Certain bias, certain perspective")
 
 data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, 0.3), alpha_target_variance == 0.0025, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0225)
-fig4.2 <- plot_belief_evolution(data, "Certain bias, uncertain content")
+fig4.2 <- plot_belief_evolution(data, "Certain bias, uncertain perspective")
 
 data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, 0.3), alpha_target_variance == 0.0625, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0025)
-fig4.3 <- plot_belief_evolution(data, "Uncertain bias, certain content")
+fig4.3 <- plot_belief_evolution(data, "Uncertain bias, certain perspective")
 
 data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, 0.3), alpha_target_variance == 0.0625, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0225)
-fig4.4 <- plot_belief_evolution(data, "Uncertain bias, uncertain content")
+fig4.4 <- plot_belief_evolution(data, "Uncertain bias, uncertain perspective")
 
 fig4 <- ggarrange(fig4.1, fig4.2, fig4.3, fig4.4, ncol=4, heights = c(5, 5, 5, 5), widths=c(5, 5, 5, 5))
 
-ggsave(paste("plots/bias_content_interaction", ".jpg", sep=""), fig4, width=15, height=8)
+ggsave(paste("plots/bias_content_interaction", ".jpg", sep=""), fig4, width=17, height=8)
 
 ##############################
 ## Cross-Topic generalization
@@ -148,7 +148,7 @@ generalization_polarization_data_wide <- generalization_polarization_model_data 
                   "alpha_target_mean", "alpha_target_variance", 
                   "variable", "absolute_belief_polarization")) %>%
   mutate(variable = case_when(
-    variable == "Content truth" ~ "content",
+    variable == "Perspective truth" ~ "content",
     variable == "Accuracy" ~ "alpha_accuracy",
     variable == "Bias" ~ "alpha_target",
     TRUE ~ variable
@@ -180,7 +180,7 @@ generalization_polarization_data_wide <- merge(generalization_polarization_data_
 ####################################################
 
 final_content_polarization <- generalization_polarization_model_data %>% 
-  filter(epoch==5, variable=="Content truth") %>%
+  filter(epoch==5, variable=="Perspective truth") %>%
   dplyr::select(c("absolute_belief_polarization"))
 summary(final_content_polarization)
 
@@ -189,7 +189,7 @@ summary(final_content_polarization)
 ############################################################################################
 
 fig5 <- plot_generalization_polarization(generalization_polarization_data_wide, "initial_alpha_accuracy_polarization", "initial_alpha_target_polarization", "content_polarization", 
-                     "brown", "Initial \nAccuracy polarization", "Initial \nBias polarization", "Content \npolarization")                                              
+                     "brown", "Acquired \nAccuracy polarization", "Acquired \nBias polarization", "Perspective \npolarization")                                              
                      
 ggsave(paste("plots/generalization/belief_polarization_relationships", ".jpg", sep=""), fig5, width=6, height=5)
 
@@ -197,7 +197,6 @@ ggsave(paste("plots/generalization/belief_polarization_relationships", ".jpg", s
 ## Examples chosen from the scatter plot
 ########################################
 
-## Old ones
 # ID = 62
 data <- generalization_model_data_long %>%
   filter(ID==62 | ID==62+243)
@@ -210,11 +209,11 @@ data <- generalization_model_data_long %>%
 fig_ID76 <- plot_belief_evolution(data, "ID = 76")
 ggsave(paste("plots/generalization/ID-76", ".jpg", sep=""), fig_ID76, width=4, height=8)
 
-# ID = 97
+# ID = 70
 data <- generalization_model_data_long %>%
-  filter(ID==97 | ID==97+243)
-fig_ID97 <- plot_belief_evolution(data, "ID = 97")
-ggsave(paste("plots/generalization/ID-97", ".jpg", sep=""), fig_ID97, width=4, height=8)
+  filter(ID==70 | ID==70+243)
+fig_ID70 <- plot_belief_evolution(data, "ID = 70")
+ggsave(paste("plots/generalization/ID-70", ".jpg", sep=""), fig_ID70, width=4, height=8)
 
 # ID = 133
 data <- generalization_model_data_long %>%
@@ -222,24 +221,24 @@ data <- generalization_model_data_long %>%
 fig_ID133 <- plot_belief_evolution(data, "ID = 133")
 ggsave(paste("plots/generalization/ID-133", ".jpg", sep=""), fig_ID133, width=4, height=8)
 
-# ID = 159
+# ID = 52
 data <- generalization_model_data_long %>%
-  filter(ID==159 | ID==159+243)
-fig_ID159 <- plot_belief_evolution(data, "ID = 159")
-ggsave(paste("plots/generalization/ID-159", ".jpg", sep=""), fig_ID159, width=4, height=8)
+  filter(ID==52 | ID==52+243)
+fig_ID52 <- plot_belief_evolution(data, "ID = 52")
+ggsave(paste("plots/generalization/ID-52", ".jpg", sep=""), fig_ID52, width=4, height=8)
 
-## New ones
-# ID = 81
-data <- generalization_model_data_long %>%
-  filter(ID==81 | ID==81+243)
-fig_ID81 <- plot_belief_evolution(data, "ID = 81")
-ggsave(paste("plots/generalization/ID-81", ".jpg", sep=""), fig_ID81, width=4, height=8)
 
-# ID = 178
+# ID = 80
 data <- generalization_model_data_long %>%
-  filter(ID==178 | ID==178+243)
-fig_ID178 <- plot_belief_evolution(data, "ID = 178")
-ggsave(paste("plots/generalization/ID-178", ".jpg", sep=""), fig_ID178, width=4, height=8)
+  filter(ID==80 | ID==80+243)
+fig_ID80 <- plot_belief_evolution(data, "ID = 80")
+ggsave(paste("plots/generalization/ID-80", ".jpg", sep=""), fig_ID80, width=4, height=8)
+
+# ID = 106
+data <- generalization_model_data_long %>%
+  filter(ID==106 | ID==106+243)
+fig_ID106 <- plot_belief_evolution(data, "ID = 106")
+ggsave(paste("plots/generalization/ID-106", ".jpg", sep=""), fig_ID106, width=4, height=8)
 
 ######################################################################################################
 ##################################### Supplementary figures ##########################################
@@ -259,9 +258,9 @@ data <- polarization_model_data %>%
   filter(alpha_target_mean == 0, alpha_target_variance == 0.0225, 
          epoch == 5)
 
-figS3.1 <- plot_heatmaps(data, "Content truth", "brown", "content_std", "alpha_accuracy_mean", "alpha_accuracy_std", "Content truth", "Accuracy")
-figS3.2 <- plot_heatmaps(data, "Accuracy", "steelblue4", "content_std", "alpha_accuracy_mean", "alpha_accuracy_std", "Content truth", "Accuracy")
-figS3.3 <- plot_heatmaps(data, "Bias", "grey10", "content_std", "alpha_accuracy_mean", "alpha_accuracy_std", "Content truth", "Accuracy")
+figS3.1 <- plot_heatmaps(data, "Perspective truth", "brown", "content_std", "alpha_accuracy_mean", "alpha_accuracy_std", "Perspective truth", "Accuracy")
+figS3.2 <- plot_heatmaps(data, "Accuracy", "steelblue4", "content_std", "alpha_accuracy_mean", "alpha_accuracy_std", "Perspective truth", "Accuracy")
+figS3.3 <- plot_heatmaps(data, "Bias", "grey10", "content_std", "alpha_accuracy_mean", "alpha_accuracy_std", "Perspective truth", "Accuracy")
 
 figS3 <- ggarrange(figS3.1, figS3.2, figS3.3, ncol=3, heights = c(5, 5, 5), widths=c(5, 5, 5))
 
@@ -272,13 +271,13 @@ data <- polarization_model_data %>%
   filter(alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625, 
          epoch == 5)
 
-figS4.1 <- plot_heatmaps(data, "Content truth", "brown", "content_std", "alpha_target_mean", "alpha_target_std", "Content truth", "Bias")
-figS4.2 <- plot_heatmaps(data, "Accuracy", "steelblue4", "content_std", "alpha_target_mean", "alpha_target_std", "Content truth", "Bias")
-figS4.3 <- plot_heatmaps(data, "Bias", "grey10", "content_std", "alpha_target_mean", "alpha_target_std", "Content truth", "Bias")
+figS4.1 <- plot_heatmaps(data, "Perspective truth", "brown", "content_std", "alpha_target_mean", "alpha_target_std", "Perspective truth", "Bias")
+figS4.2 <- plot_heatmaps(data, "Accuracy", "steelblue4", "content_std", "alpha_target_mean", "alpha_target_std", "Perspective truth", "Bias")
+figS4.3 <- plot_heatmaps(data, "Bias", "grey10", "content_std", "alpha_target_mean", "alpha_target_std", "Perspective truth", "Bias")
 
 figS4 <- ggarrange(figS4.1, figS4.2, figS4.3, ncol=3, heights = c(5, 5, 5), widths=c(5, 5, 5))
 
-ggsave(paste("plots/supplementary/bias_content_interaction", ".jpg", sep=""), figS4, width=15, height=8)
+ggsave(paste("plots/supplementary/bias_content_interaction", ".jpg", sep=""), figS4, width=17, height=8)
 
 ######################################
 ## Investigating individual conditions
@@ -290,29 +289,29 @@ data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, -0.3) , alpha_target_variance == 0.0025, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0025)
-figS2.1 <- plot_belief_evolution(data, "Certain bias, certain content")
+figS2.1 <- plot_belief_evolution(data, "Certain bias, certain perspective")
 
 data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, -0.3), alpha_target_variance == 0.0025, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0225)
-figS2.2 <- plot_belief_evolution(data, "Certain bias, uncertain content")
+figS2.2 <- plot_belief_evolution(data, "Certain bias, uncertain perspective")
 
 data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, -0.3), alpha_target_variance == 0.0625, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0025)
-figS2.3 <- plot_belief_evolution(data, "Uncertain bias, certain content")
+figS2.3 <- plot_belief_evolution(data, "Uncertain bias, certain perspective")
 
 data <- model_data_long %>%
   filter(is.nearly.equal(alpha_target_mean, -0.3), alpha_target_variance == 0.0625, 
          alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
          content_variance == 0.0225)
-figS2.4 <- plot_belief_evolution(data, "Uncertain bias, uncertain content")
+figS2.4 <- plot_belief_evolution(data, "Uncertain bias, uncertain perspective")
 
 figS2 <- ggarrange(figS2.1, figS2.2, figS2.3, figS2.4, ncol=4, heights = c(5, 5, 5, 5), widths=c(5, 5, 5, 5))
 
-ggsave(paste("plots/supplementary/bias_content_interaction_bias_against", ".jpg", sep=""), figS2, width=15, height=8)
+ggsave(paste("plots/supplementary/bias_content_interaction_bias_against", ".jpg", sep=""), figS2, width=17, height=8)
 
 
 

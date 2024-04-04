@@ -27,8 +27,8 @@ prepare_model_data <- function(model_data){
                                                                                      "alpha_accuracy_mean", "alpha_accuracy_variance", 
                                                                                      "alpha_target_mean", "alpha_target_variance",
                                                                                      "action", "action_prob", "variable"))
-  model_data_long$variable <- recode(model_data_long$variable, "alpha_accuracy"="Accuracy", "alpha_target"="Bias", "content"="Content truth")
-  model_data_long$variable <- factor(model_data_long$variable, levels=c("Content truth", "Accuracy", "Bias"))
+  model_data_long$variable <- recode(model_data_long$variable, "alpha_accuracy"="Accuracy", "alpha_target"="Bias", "content"="Perspective truth")
+  model_data_long$variable <- factor(model_data_long$variable, levels=c("Perspective truth", "Accuracy", "Bias"))
   
   return(model_data_long)
 }
@@ -55,7 +55,7 @@ plot_heatmaps <- function(data, var_name, fill_color, x_var, y_var, row_var, dif
   upper_limit <- 1.0
   if(var_name=="Bias"){
     upper_limit <- 0.55
-  } else if(var_name=="Content truth"){
+  } else if(var_name=="Perspective truth"){
     upper_limit <- 0.65
   }
   
@@ -126,7 +126,7 @@ plot_belief_evolution_subfigs <- function(data, var_name, line_color, differing_
 }
 
 plot_belief_evolution <- function(data, title){
-  subfig1 <- plot_belief_evolution_subfigs(data, "Content truth", "brown", "content_mean")
+  subfig1 <- plot_belief_evolution_subfigs(data, "Perspective truth", "brown", "content_mean")
   subfig2 <- plot_belief_evolution_subfigs(data, "Accuracy", "blue3", "content_mean")
   subfig3 <- plot_belief_evolution_subfigs(data, "Bias", "grey30", "content_mean")
   
@@ -154,7 +154,9 @@ plot_belief_polarization_relationship <- function(data, x_var, y_var, fill_var, 
     theme(panel.grid.major = element_blank(), 
           axis.text = element_text(size = 12), 
           plot.title = element_text(size = 16, face = 'bold'), 
-          axis.title = element_text(face = 'bold')) + 
+          axis.title = element_text(face = 'bold'),
+          legend.title = element_text(face = 'bold'),
+          legend.text = element_text(size = 14)) + 
     xlab(xlabel) +
     ylab(ylabel)
   
@@ -179,7 +181,9 @@ plot_belief_polarization_relationship <- function(data, x_var, y_var, fill_var, 
     theme(panel.grid.major = element_blank(), 
           axis.text = element_text(size = 12), 
           plot.title = element_text(size = 16, face = 'bold'), 
-          axis.title = element_text(face = 'bold')) + 
+          axis.title = element_text(face = 'bold'),
+          legend.title = element_text(face='bold'),
+          legend.text = element_text(size = 14),) + 
     xlab(xlabel) +
     ylab(ylabel)
   
