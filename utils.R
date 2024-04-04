@@ -90,7 +90,7 @@ plot_heatmaps <- function(data, var_name, fill_color, x_var, y_var, row_var, dif
 plot_belief_evolution_subfigs <- function(data, var_name, line_color, differing_belief_col){
   if(var_name=="Bias"){
     y_lim <- c(-0.6,0.6)
-    x_label <- "Epoch"
+    x_label <- "Debunking actions"
     axis_settings <- theme(axis.text.x = element_text(angle = 0, hjust = 1),
                            axis.ticks.x = element_line())
   } else {
@@ -132,8 +132,8 @@ plot_belief_evolution <- function(data, title){
   
   title_plot1 <- ggplot() + 
     theme_void() + 
-    annotate("text", x = 0, y = 0, label = title, size = 6, fontface = "bold")
-  fig <- ggarrange(title_plot1, subfig1, subfig2, subfig3, nrow=4, heights = c(1, 5, 5, 5), widths=c(5, 5, 5, 6))
+    annotate("text", x = 0, y = 0, label = title, size = 8, fontface = "bold")
+  fig <- ggarrange(title_plot1, subfig1, subfig2, subfig3, nrow=4, heights = c(1.5, 5, 5, 5), widths=c(5, 5, 5, 6))
   return(fig)
 }
 
@@ -154,8 +154,8 @@ plot_belief_polarization_relationship <- function(data, x_var, y_var, fill_var, 
     theme(panel.grid.major = element_blank(), 
           axis.text = element_text(size = 12), 
           plot.title = element_text(size = 16, face = 'bold'), 
-          axis.title = element_text(face = 'bold'),
-          legend.title = element_text(face = 'bold'),
+          axis.title = element_text(size = 16, face = 'bold'),
+          legend.title = element_text(size = 16, face = 'bold'),
           legend.text = element_text(size = 14)) + 
     xlab(xlabel) +
     ylab(ylabel)
@@ -179,10 +179,10 @@ plot_belief_polarization_relationship <- function(data, x_var, y_var, fill_var, 
                          guide = guide_legend(title = legend)) +
     theme_bw() +
     theme(panel.grid.major = element_blank(), 
-          axis.text = element_text(size = 12), 
+          axis.text = element_text(size = 14), 
           plot.title = element_text(size = 16, face = 'bold'), 
-          axis.title = element_text(face = 'bold'),
-          legend.title = element_text(face='bold'),
+          axis.title = element_text(face = 'bold', size=14),
+          legend.title = element_text(face='bold', size=14),
           legend.text = element_text(size = 14),) + 
     xlab(xlabel) +
     ylab(ylabel)
