@@ -147,6 +147,7 @@ plot_belief_polarization_relationship <- function(data, x_var, y_var, fill_var, 
   sub_fig <- ggplot(data, aes(x = !!x_sym, y = !!y_sym, color = !!fill_sym)) +
     geom_vline(xintercept=0.6, color="grey10", linetype="dashed") + 
     geom_point(size=3) + 
+    # geom_text(aes(label=ID.y), vjust = -0.5, size = 1.8, color="darkgreen") +       # Uncomment if you want to see the simulation IDs for each data point
     scale_color_gradient(low = "grey90", high = fill_color,
                          limits = c(0, max(data[[fill_var]], na.rm = TRUE)),
                          guide = guide_legend(title = legend)) +

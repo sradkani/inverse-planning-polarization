@@ -23,7 +23,7 @@ polarization_model_data <- calculate_polarization(model_data_long, differing_bel
 
 polarization_data_wide <- polarization_model_data %>% 
   filter(epoch == 5) %>%
-  dplyr::select(c("epoch", 
+  dplyr::select(c("epoch", "ID.y",
                   "content_variance", 
                   "alpha_accuracy_mean", "alpha_accuracy_variance", 
                   "alpha_target_mean", "alpha_target_variance", 
@@ -44,7 +44,7 @@ fig2 <- plot_belief_polarization_relationship(polarization_data_wide,
                                                 "content_polarization", "alpha_accuracy_polarization", "alpha_target_polarization", 
                                                 "grey10", "Perspective polarization", "Accuracy polarization", "Bias \npolarization")
 
-ggsave(paste("plots/belief_polarization_relationships", ".jpg", sep=""), fig2, width=6.5, height=5)
+ggsave(paste("plots/belief_polarization_relationships2", ".jpg", sep=""), fig2, width=6.5, height=5)
                                                 
 ######################################
 ## Investigating individual conditions
