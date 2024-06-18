@@ -315,6 +315,28 @@ figS2 <- ggarrange(figS2.1, figS2.2, figS2.3, figS2.4, ncol=4, heights = c(5, 5,
 ggsave(paste("plots/supplementary/bias_content_interaction_bias_against", ".jpg", sep=""), figS2, width=17, height=9)
 
 
+## Equivalent of fig 2 
+## Load the data and preprocess
+model_data0 <- read.csv("results_Uaccuracy_Utarget_supplementary/training_All/simulated_results_format0.csv", header = TRUE)
+model_data_long_supplementary <- prepare_model_data(model_data0)
+
+### The two example settings:
+# - convergence: certain about high accuracy and impartiality, uncertain content 
+# - polarization: uncertain about somewhat-accuracy and impartiality, certain content
+data <- model_data_long_supplementary %>%
+  filter(alpha_target_mean == 0, alpha_target_variance == 0.0025, 
+         alpha_accuracy_mean == 0.8, alpha_accuracy_variance == 0.0025,
+         content_variance == 0.0225)
+figS7.1 <- plot_belief_evolution(data, "Convergence", "Authority's actions")
+
+data <- model_data_long_supplementary %>%
+  filter(alpha_target_mean == 0, alpha_target_variance == 0.0625, 
+         alpha_accuracy_mean == 0.5, alpha_accuracy_variance == 0.0625,
+         content_variance == 0.0025)
+figS7.2 <- plot_belief_evolution(data, "Polarization", "Authority's actions")
+
+figS7 <- ggarrange(figS7.1, figS7.2, ncol=2, heights = c(5, 5), widths=c(5, 5))
+ggsave(paste("plots/supplementary/convergence_polarization_examples_supplementary", ".jpg", sep=""), figS7, width=8, height=8)
 
 
 

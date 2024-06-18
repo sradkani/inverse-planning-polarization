@@ -87,10 +87,10 @@ plot_heatmaps <- function(data, var_name, fill_color, x_var, y_var, row_var, dif
   return(sub_fig)
 }
 
-plot_belief_evolution_subfigs <- function(data, var_name, line_color, differing_belief_col){
+plot_belief_evolution_subfigs <- function(data, var_name, line_color, differing_belief_col, x_lable){
   if(var_name=="Bias"){
     y_lim <- c(-0.6,0.6)
-    x_label <- "Debunking actions"
+    x_label <- x_lable
     axis_settings <- theme(axis.text.x = element_text(angle = 0, hjust = 1),
                            axis.ticks.x = element_line())
   } else {
@@ -125,10 +125,10 @@ plot_belief_evolution_subfigs <- function(data, var_name, line_color, differing_
   return(sub_fig)
 }
 
-plot_belief_evolution <- function(data, title){
-  subfig1 <- plot_belief_evolution_subfigs(data, "Perspective truth", "brown", "content_mean")
-  subfig2 <- plot_belief_evolution_subfigs(data, "Accuracy", "blue3", "content_mean")
-  subfig3 <- plot_belief_evolution_subfigs(data, "Bias", "grey30", "content_mean")
+plot_belief_evolution <- function(data, title, x_lable="Debunking actions"){
+  subfig1 <- plot_belief_evolution_subfigs(data, "Perspective truth", "brown", "content_mean", x_lable)
+  subfig2 <- plot_belief_evolution_subfigs(data, "Accuracy", "blue3", "content_mean", x_lable)
+  subfig3 <- plot_belief_evolution_subfigs(data, "Bias", "grey30", "content_mean", x_lable)
   
   title_plot1 <- ggplot() + 
     theme_void() + 

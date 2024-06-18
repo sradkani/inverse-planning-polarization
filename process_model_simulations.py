@@ -15,7 +15,8 @@ scenarios = [name for name in os.listdir(log_dir) if os.path.isdir(os.path.join(
 conditions = [name for name in os.listdir(f"{log_dir}/{scenarios[0]}") if os.path.isdir(os.path.join(f"{log_dir}/{scenarios[0]}", name))]
 IDs = [name for name in os.listdir(f"{log_dir}/{scenarios[0]}/{conditions[0]}") if os.path.isdir(os.path.join(f"{log_dir}/{scenarios[0]}/{conditions[0]}", name))]
 epochs = [name for name in os.listdir(f"{log_dir}/{scenarios[0]}/{conditions[0]}/{IDs[0]}") if os.path.isdir(os.path.join(f"{log_dir}/{scenarios[0]}/{conditions[0]}/{IDs[0]}", name))]
-available_actions = [name for name in os.listdir(f"{log_dir}/{scenarios[0]}/{conditions[0]}/{IDs[0]}/{epochs[0]}/posteriors") if os.path.isdir(os.path.join(f"{log_dir}/{scenarios[0]}/{conditions[0]}/{IDs[0]}/{epochs[0]}/posteriors", name))]
+# available_actions = [name for name in os.listdir(f"{log_dir}/{scenarios[0]}/{conditions[0]}/{IDs[0]}/{epochs[0]}/posteriors") if os.path.isdir(os.path.join(f"{log_dir}/{scenarios[0]}/{conditions[0]}/{IDs[0]}/{epochs[0]}/posteriors", name))]
+available_actions = ['None', 'Debunk']
 
 ## TODO: Instead of hand coding the column names, I should make the column names to be determined by whatever file name that is there in the results folder
 data_df0 = pd.DataFrame({'scenario': [], 'condition': [], 'ID': [], 
@@ -103,6 +104,9 @@ for combination in itertools.product(scenarios, conditions, IDs, epochs):
     # for each action, read the posterior belief of the observer given the moderator chooses that action
     for action in available_actions:
         # read the posterior beliefs
+        if(not os.path.exists(f'{log_dir}/{scenario}/{simulation_condition}/ID_{ID}/{epoch}/posteriors/{action}/')):
+            continue 
+
         file_names = [filename for filename in os.listdir(f'{log_dir}/{scenario}/{simulation_condition}/ID_{ID}/{epoch}/posteriors/{action}/') 
                       if (filename.startswith("expected_") and f"{params['alpha0']}_{params['beta']}_{params['gamma']}" in filename)]
         variable_names = np.unique(["_".join(fname.split("_")[1:-3]) for fname in file_names]).tolist()

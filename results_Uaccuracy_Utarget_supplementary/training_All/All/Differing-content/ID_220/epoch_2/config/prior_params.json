@@ -1,0 +1,12 @@
+[
+    {
+        "scenario": "All",
+        "simulation": "Differing-content",
+        "beta_a_alpha_accuracy": 49.32082670981198,
+        "beta_a_alpha_target": 51.38312150310598,
+        "beta_a_content": 6.020694390455836,
+        "beta_b_alpha_accuracy": 12.48007225663129,
+        "beta_b_alpha_target": 48.99277797035717,
+        "beta_b_content": 6.182708753296002
+    }
+]
