@@ -34,5 +34,5 @@ For **supplementary material simulations**, the corresponding files with "supple
 - **process_model_simulations_generalization.py**: This file is used for the cross-topic generalization simulations.
 
 ### Plotting
-- **plots.R**: This R script generates plots from the processed simulation results. The plots are saved in the **plots/** folder.
+- **plots.R**: This R script generates plots from the processed simulation results. The plots are saved in the `plots` folder.
 - **utils.R**: This file contains the functions used for making the plots.
