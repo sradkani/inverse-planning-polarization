@@ -21,12 +21,14 @@ The code is designed to run on a cluster, and the simulation parameters are conf
 ### Configurations and Parameter Files
 
 - **general_config/**: This folder contains JSON files that store parameters for different simulation scenarios (e.g., prior distributions, action sequences, utilities).
+- **array_ID_to_params.py**: This file saves the parameters for running each of the simulations, with a given ID. The results are saved in the `general_config` folder.
+- **param_selection.ipynb**: This notebook is used for exploring the shape of the prior distributions and the corresponding parameters.
 
 ### Generalization and Supplementary Simulations
 
-For **cross-topic generalization simulations**, the corresponding files with "generalization" in their name are used. The primary file to run the simulations is **submit_run_generalization_model.sh**.
+For **cross-topic generalization simulations**, the corresponding files with "generalization" in their name are used. The primary file to run the simulations is `submit_run_generalization_model.sh`.
 
-For **supplementary material simulations**, the corresponding files with "supplementary" in their name are used. The primary file to run the simulations is **submit_run_model_supplementary.sh**.
+For **supplementary material simulations**, the corresponding files with "supplementary" in their name are used. The primary file to run the simulations is `submit_run_model_supplementary.sh`.
 
 ### Processing
 
